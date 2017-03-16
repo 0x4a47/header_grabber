@@ -80,10 +80,10 @@ def parse_headers(headers):
         #header filter
         if "Set-Cookie" == header:
             continue
-        if "Server" != header:
-            continue
+        if "Server" == header:
+            print CGREEN + header,value + CEND
             # print header,value
-        print CGREEN + header,value + CEND
+        print header,value
         #print header, value
         num_headers_printed += 1
 
