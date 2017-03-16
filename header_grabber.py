@@ -56,21 +56,21 @@ def parse_headers(headers):
     #Big 'switch' like if statement for printing of the headers.
     #[TO-DO] could be changed to a for each?
     #Server should be first as it is the most important for this PoC.
-    if "Server" in headers:
-        print "Server:",headers['Server']
-        num_headers_printed += 1
-    if "Content-Type" in headers:
-        print "Content-Type:",headers['Content-Type']
-        num_headers_printed += 1
-    if "Etag" in headers:
-        print "Etag:",headers['ETag']
-        num_headers_printed += 1
-    if "Date" in headers:
-        print "Date:",headers['Date']
+    #if "Access-Control-Allow-Credentials" in headers:
+
+    #Python 2.7 implementation.
+    for header, value in headers.iteritems():
+        print header, value
         num_headers_printed += 1
 
+    #python 3.0 implementation for those who upgraded already
+    #for header, value in d.items():
+    #    print header, value
+    #    num_headers_printed += 1
 
     print num_headers_printed
+
+    #[LIST OF 'COMMON' RESPONSE HEADERS]
     # Access-Control-Allow-Credentials
     # Access-Control-Allow-Headers
     # Access-Control-Allow-Methods
