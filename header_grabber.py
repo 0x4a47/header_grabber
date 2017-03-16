@@ -64,7 +64,8 @@ def parse_headers(headers):
     #manually checked.
     num_headers_present = len(headers)
     num_headers_printed = 0
-    print "[Found ",num_headers_present," headers]"
+    #[DEBUG]
+    #print "[Found ",num_headers_present," headers]"
     # print "Last-Modified:",headers['Last-Modified']
     # print "X-Powered-By:", headers['X-Powered-By']
     # print "Content-Length:", headers['Content-Length']
@@ -82,7 +83,7 @@ def parse_headers(headers):
         if "Server" != header:
             continue
             # print header,value
-        print header,value
+        print CGREEN + header,value + CEND
         #print header, value
         num_headers_printed += 1
 
@@ -118,6 +119,7 @@ def main():
             #print 'True'
             #make the request and get the headers
             #set the return headers to r_headers
+            print CVIOLET + "Requesting:", fqdn.strip('\n'), "" + CEND
             r_headers = request_headers(fqdn)
             #extract the header information from the server.
             parse_headers(r_headers)
