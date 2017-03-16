@@ -3,6 +3,7 @@ import requests
 import sys
 import json
 from urlparse import urlparse
+import os.path
 
 def uri_validator(x):
     try:
@@ -25,12 +26,15 @@ def request_headers(url):
     #parse specific errors
     except requests.exceptions.ConnectionError:
         print "The was a connection error, check your domain!"
+        #sys.exit()
     except requests.exceptions.Timeout:
         # Maybe set up for a retry, or continue in a retry loop
         print "There was a timeout, try again."
+        #sys.exit()
     except requests.exceptions.TooManyRedirects:
         # Tell the user their URL was bad and try a different one
         print "There were TooManyRedirects"
+        #sys.exit()
     except requests.exceptions.RequestException as e:
         # catastrophic error. bail.
         print "This is bad."
@@ -64,7 +68,10 @@ def parse_headers(headers):
         #header filter
         if "Set-Cookie" == header:
             continue
-        print header, value
+
+        # if "Server" == header:
+            # print header,value
+        print header,value
         #print header, value
         num_headers_printed += 1
 
@@ -75,93 +82,75 @@ def parse_headers(headers):
 
     print num_headers_printed
 
-    #[LIST OF 'COMMON' RESPONSE HEADERS]
-    # Access-Control-Allow-Credentials
-    # Access-Control-Allow-Headers
-    # Access-Control-Allow-Methods
-    # Access-Control-Allow-Origin
-    # Access-Control-Expose-Headers
-    # Access-Control-Max-Age
-    # Accept-Ranges
-    # Age
-    # Allow
-    # Alternate-Protocol
-    # Cache-Control
-    # Client-Date
-    # Client-Peer
-    # Client-Response-Num
-    # Connection
-    # Content-Disposition
-    # Content-Encoding
-    # Content-Language
-    # Content-Length
-    # Content-Location
-    # Content-MD5
-    # Content-Range
-    # Content-Security-Policy
-    #X-Content-Security-Policy
-    # X-WebKit-CSP
-    # Content-Security-Policy-Report-Only
-    # Content-Type
-    # Date
-    # ETag
-    # Expires
-    # HTTP
-    # Keep-Alive
-    # Last-Modified
-    # Link
-    # Location
-    # P3P
-    # Pragma
-    # Proxy-Authenticate
-    # Proxy-Connection
-    # Refresh
-    # Retry-After
-    # Server
-    # Set-Cookie
-    # Status
-    # Strict-Transport-Security
-    # Timing-Allow-Origin
-    # Trailer
-    # Transfer-Encoding
-    # Upgrade
-    # Vary
-    # Via
-    # Warning
-    # WWW-Authenticate
-    # X-Aspnet-Version
-    # X-Content-Type-Options
-    # X-Frame-Options
-    # X-Permitted-Cross-Domain-Policies
-    # X-Pingback
-    # X-Powered-By
-    # X-Robots-Tag
-    # X-UA-Compatible
-    # X-XSS-Protection
-
-
 def main():
     fqdn =''
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--domain', nargs='+',help='http/https FQDN.',default=None)
-    parser.add_argument('-i', '--ifile', nargs='+',help='Load domains from input file.',default=None)
-
+    parser.add_argument('-i', '--ifile', nargs='+',help='Load domains from a .txt file.',default=None)
     args = parser.parse_args()
-    #remove it from the array and store it in a domain name variable.
-    fqdn = vars(args)['domain'][0]
-    if uri_validator(fqdn) is True:
-        #[DEBUG]
-        #print 'True'
-        #make the request and get the headers
-        #[TO-DO]
-        #print parse_headers(request_headers(fqdn))
-        #set the return headers to r_headers
-        r_headers = request_headers(fqdn)
-        #extract the header information from the server.
-        parse_headers(r_headers)
 
-    else:
-        print 'Please enter a valid URL/domain'
+    #check that both arguments are not set
+    if args.domain is not None and args.ifile is not None:
+        print "Can only specify one of either -d or -i"
+        sys.exit()
+
+    #check that the arguments exist so it doesnt try to load every run.
+    #-d option functionaltu
+    if args.domain is not None:
+        #[DEBUG]
+        #print "Domain argument specified"
+
+        #remove it from the array and store it in a domain name variable.
+        fqdn = vars(args)['domain'][0]
+        if uri_validator(fqdn) is True:
+            #[DEBUG]
+            #print 'True'
+            #make the request and get the headers
+            #set the return headers to r_headers
+            r_headers = request_headers(fqdn)
+            #extract the header information from the server.
+            parse_headers(r_headers)
+            print "x"
+
+        else:
+            print 'Please enter a valid URL/domain'
+            sys.exit()
+
+    #-i option functionality
+    if args.ifile is not None:
+        #[DEBUG]
+        #print "input file specified"
+        #remove it from the array and store it in the ifile variable
+        ifile = vars(args)['ifile'][0]
+        #extract the file extension and check it is a text file
+        file_extension = os.path.splitext(ifile)[1]
+        if file_extension == ".txt":
+            #[DEBUG]
+            #print "Valid"
+            with open(ifile) as f:
+                for file_fqdn in f:
+                    if uri_validator(file_fqdn) is True:
+                        #[DEBUG]
+                        #print 'True'
+                        #make the request and get the headers
+                        #set the return headers to r_headers
+                        print "Requesting:", file_fqdn
+                        r_headers = request_headers(file_fqdn)
+                        if r_headers is not None:
+                            #extract the header information from the server.
+                            #[DEBUG]
+                            #print r_headers
+                            parse_headers(r_headers)
+                        else:
+                            continue
+                    else:
+                        print file_fqdn, " Is an invalid domain / url"
+
+        else:
+            print "Invalid file. Please provide a valid .txt file"
+            sys.exit()
+
+
 
 
 
