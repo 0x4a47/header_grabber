@@ -52,7 +52,7 @@ def parse_headers(headers):
     # print "X-Powered-By:", headers['X-Powered-By']
     # print "Content-Length:", headers['Content-Length']
 
-    print num_headers_present
+    print "[Found ",num_headers_present, "headers]"
     #Big 'switch' like if statement for printing of the headers.
     #[TO-DO] could be changed to a for each?
     #Server should be first as it is the most important for this PoC.
@@ -60,7 +60,12 @@ def parse_headers(headers):
 
     #Python 2.7 implementation.
     for header, value in headers.iteritems():
+        #[TEMP] filter out set-cookie for the moment.
+        #header filter
+        if "Set-Cookie" == header:
+            continue
         print header, value
+        #print header, value
         num_headers_printed += 1
 
     #python 3.0 implementation for those who upgraded already
@@ -139,6 +144,7 @@ def main():
     fqdn =''
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--domain', nargs='+',help='http/https FQDN.',default=None)
+    parser.add_argument('-i', '--ifile', nargs='+',help='Load domains from input file.',default=None)
 
     args = parser.parse_args()
     #remove it from the array and store it in a domain name variable.
