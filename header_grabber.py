@@ -5,6 +5,18 @@ import json
 from urlparse import urlparse
 import os.path
 
+#Color definitions
+CEND      = '\33[0m'
+CBOLD     = '\33[1m'
+CITALIC   = '\33[3m'
+CURL      = '\33[4m'
+CRED    = '\33[31m'
+CGREEN  = '\33[32m'
+CYELLOW = '\33[33m'
+CBLUE   = '\33[34m'
+CVIOLET = '\33[35m'
+
+
 def uri_validator(x):
     try:
         result = urlparse(x)
@@ -52,11 +64,10 @@ def parse_headers(headers):
     #manually checked.
     num_headers_present = len(headers)
     num_headers_printed = 0
+    print "[Found ",num_headers_present," headers]"
     # print "Last-Modified:",headers['Last-Modified']
     # print "X-Powered-By:", headers['X-Powered-By']
     # print "Content-Length:", headers['Content-Length']
-
-    print "[Found ",num_headers_present, "headers]"
     #Big 'switch' like if statement for printing of the headers.
     #[TO-DO] could be changed to a for each?
     #Server should be first as it is the most important for this PoC.
@@ -68,8 +79,8 @@ def parse_headers(headers):
         #header filter
         if "Set-Cookie" == header:
             continue
-
-        # if "Server" == header:
+        if "Server" != header:
+            continue
             # print header,value
         print header,value
         #print header, value
@@ -80,7 +91,7 @@ def parse_headers(headers):
     #    print header, value
     #    num_headers_printed += 1
 
-    print num_headers_printed
+    #print num_headers_printed
 
 def main():
     fqdn =''
@@ -91,7 +102,7 @@ def main():
 
     #check that both arguments are not set
     if args.domain is not None and args.ifile is not None:
-        print "Can only specify one of either -d or -i"
+        print CRED + "Can only specify one of either -d or -i" + CEND
         sys.exit()
 
     #check that the arguments exist so it doesnt try to load every run.
@@ -110,10 +121,9 @@ def main():
             r_headers = request_headers(fqdn)
             #extract the header information from the server.
             parse_headers(r_headers)
-            print "x"
 
         else:
-            print 'Please enter a valid URL/domain'
+            print CRED + 'Please enter a valid URL/domain' + CEND
             sys.exit()
 
     #-i option functionality
@@ -134,7 +144,7 @@ def main():
                         #print 'True'
                         #make the request and get the headers
                         #set the return headers to r_headers
-                        print "Requesting:", file_fqdn
+                        print CVIOLET + "Requesting:", file_fqdn.strip('\n'), "" + CEND
                         r_headers = request_headers(file_fqdn)
                         if r_headers is not None:
                             #extract the header information from the server.
@@ -144,10 +154,10 @@ def main():
                         else:
                             continue
                     else:
-                        print file_fqdn, " Is an invalid domain / url"
+                        print CRED + file_fqdn, " Is an invalid domain / url" + CEND
 
         else:
-            print "Invalid file. Please provide a valid .txt file"
+            print CRED + "Invalid file. Please provide a valid .txt file" + CEND
             sys.exit()
 
 
