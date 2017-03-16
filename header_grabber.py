@@ -42,81 +42,97 @@ def parse_headers(headers):
     #for each header specified in https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
     #create an if to check whether it exists in the response. If so, print the value.
 
+    #store the number of headers in the response.
+    #then, increment each 'print' of a header by 1 to check if any header was missed.
+    #if a header was missed, the response contained custom headers and should be
+    #manually checked.
+    num_headers_present = len(headers)
+    num_headers_printed = 0
+    # print "Last-Modified:",headers['Last-Modified']
+    # print "X-Powered-By:", headers['X-Powered-By']
+    # print "Content-Length:", headers['Content-Length']
+
+    print num_headers_present
+    #Big 'switch' like if statement for printing of the headers.
+    #[TO-DO] could be changed to a for each?
+    #Server should be first as it is the most important for this PoC.
+    if "Server" in headers:
+        print "Server:",headers['Server']
+        num_headers_printed += 1
+    if "Content-Type" in headers:
+        print "Content-Type:",headers['Content-Type']
+        num_headers_printed += 1
+    if "Etag" in headers:
+        print "Etag:",headers['ETag']
+        num_headers_printed += 1
+    if "Date" in headers:
+        print "Date:",headers['Date']
+        num_headers_printed += 1
 
 
-    print len(headers)
-    print "Content-Type:",headers['Content-Type']
-    print "Date:",headers['Date']
-    print "Etag:",headers['ETag']
-    print "Last-Modified:",headers['Last-Modified']
-    print "Server:",headers['Server']
-    print "X-Powered-By:", headers['X-Powered-By']
-    print "Content-Length:", headers['Content-Length']
-
-
-#List of common HTTP response headers
-# Access-Control-Allow-Credentials
-# Access-Control-Allow-Headers
-# Access-Control-Allow-Methods
-# Access-Control-Allow-Origin
-# Access-Control-Expose-Headers
-# Access-Control-Max-Age
-# Accept-Ranges
-# Age
-# Allow
-# Alternate-Protocol
-# Cache-Control
-# Client-Date
-# Client-Peer
-# Client-Response-Num
-# Connection
-# Content-Disposition
-# Content-Encoding
-# Content-Language
-# Content-Length
-# Content-Location
-# Content-MD5
-# Content-Range
-# Content-Security-Policy
-#X-Content-Security-Policy
-# X-WebKit-CSP
-# Content-Security-Policy-Report-Only
-# Content-Type
-# Date
-# ETag
-# Expires
-# HTTP
-# Keep-Alive
-# Last-Modified
-# Link
-# Location
-# P3P
-# Pragma
-# Proxy-Authenticate
-# Proxy-Connection
-# Refresh
-# Retry-After
-# Server
-# Set-Cookie
-# Status
-# Strict-Transport-Security
-# Timing-Allow-Origin
-# Trailer
-# Transfer-Encoding
-# Upgrade
-# Vary
-# Via
-# Warning
-# WWW-Authenticate
-# X-Aspnet-Version
-# X-Content-Type-Options
-# X-Frame-Options
-# X-Permitted-Cross-Domain-Policies
-# X-Pingback
-# X-Powered-By
-# X-Robots-Tag
-# X-UA-Compatible
-# X-XSS-Protection
+    print num_headers_printed
+    # Access-Control-Allow-Credentials
+    # Access-Control-Allow-Headers
+    # Access-Control-Allow-Methods
+    # Access-Control-Allow-Origin
+    # Access-Control-Expose-Headers
+    # Access-Control-Max-Age
+    # Accept-Ranges
+    # Age
+    # Allow
+    # Alternate-Protocol
+    # Cache-Control
+    # Client-Date
+    # Client-Peer
+    # Client-Response-Num
+    # Connection
+    # Content-Disposition
+    # Content-Encoding
+    # Content-Language
+    # Content-Length
+    # Content-Location
+    # Content-MD5
+    # Content-Range
+    # Content-Security-Policy
+    #X-Content-Security-Policy
+    # X-WebKit-CSP
+    # Content-Security-Policy-Report-Only
+    # Content-Type
+    # Date
+    # ETag
+    # Expires
+    # HTTP
+    # Keep-Alive
+    # Last-Modified
+    # Link
+    # Location
+    # P3P
+    # Pragma
+    # Proxy-Authenticate
+    # Proxy-Connection
+    # Refresh
+    # Retry-After
+    # Server
+    # Set-Cookie
+    # Status
+    # Strict-Transport-Security
+    # Timing-Allow-Origin
+    # Trailer
+    # Transfer-Encoding
+    # Upgrade
+    # Vary
+    # Via
+    # Warning
+    # WWW-Authenticate
+    # X-Aspnet-Version
+    # X-Content-Type-Options
+    # X-Frame-Options
+    # X-Permitted-Cross-Domain-Policies
+    # X-Pingback
+    # X-Powered-By
+    # X-Robots-Tag
+    # X-UA-Compatible
+    # X-XSS-Protection
 
 
 def main():
