@@ -39,8 +39,84 @@ def request_headers(url):
         sys.exit(1)
 
 def parse_headers(headers):
+    #for each header specified in https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+    #create an if to check whether it exists in the response. If so, print the value.
+
+
+
+    print len(headers)
     print "Content-Type:",headers['Content-Type']
-    #print headers['Content-Type']
+    print "Date:",headers['Date']
+    print "Etag:",headers['ETag']
+    print "Last-Modified:",headers['Last-Modified']
+    print "Server:",headers['Server']
+    print "X-Powered-By:", headers['X-Powered-By']
+    print "Content-Length:", headers['Content-Length']
+
+
+#List of common HTTP response headers
+# Access-Control-Allow-Credentials
+# Access-Control-Allow-Headers
+# Access-Control-Allow-Methods
+# Access-Control-Allow-Origin
+# Access-Control-Expose-Headers
+# Access-Control-Max-Age
+# Accept-Ranges
+# Age
+# Allow
+# Alternate-Protocol
+# Cache-Control
+# Client-Date
+# Client-Peer
+# Client-Response-Num
+# Connection
+# Content-Disposition
+# Content-Encoding
+# Content-Language
+# Content-Length
+# Content-Location
+# Content-MD5
+# Content-Range
+# Content-Security-Policy
+#X-Content-Security-Policy
+# X-WebKit-CSP
+# Content-Security-Policy-Report-Only
+# Content-Type
+# Date
+# ETag
+# Expires
+# HTTP
+# Keep-Alive
+# Last-Modified
+# Link
+# Location
+# P3P
+# Pragma
+# Proxy-Authenticate
+# Proxy-Connection
+# Refresh
+# Retry-After
+# Server
+# Set-Cookie
+# Status
+# Strict-Transport-Security
+# Timing-Allow-Origin
+# Trailer
+# Transfer-Encoding
+# Upgrade
+# Vary
+# Via
+# Warning
+# WWW-Authenticate
+# X-Aspnet-Version
+# X-Content-Type-Options
+# X-Frame-Options
+# X-Permitted-Cross-Domain-Policies
+# X-Pingback
+# X-Powered-By
+# X-Robots-Tag
+# X-UA-Compatible
+# X-XSS-Protection
 
 
 def main():
@@ -57,7 +133,11 @@ def main():
         #make the request and get the headers
         #[TO-DO]
         #print parse_headers(request_headers(fqdn))
-        print request_headers(fqdn)
+        #set the return headers to r_headers
+        r_headers = request_headers(fqdn)
+        #extract the header information from the server.
+        parse_headers(r_headers)
+
     else:
         print 'Please enter a valid URL/domain'
 
